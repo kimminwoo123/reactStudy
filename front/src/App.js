@@ -1,11 +1,9 @@
-import React, { Component } from "react"
-import MyComponent from './MyComponent'
+import React from "react"
+import Say from "./Say"
 import "./App.css"
 
-class App extends Component {
-  render() {
-    return  <MyComponent name='React' favoriteNumber={1}>리액트1</MyComponent>
-  }
+const App = () => {
+  return <Say />
 }
 
 export default App
