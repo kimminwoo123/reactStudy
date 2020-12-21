@@ -1,9 +1,13 @@
-import React from "react"
-import Say from "./Say"
+import React, { Component } from "react"
+import ValidationSample from './ValidationSample'
 import "./App.css"
 
-const App = () => {
-  return <Say />
+class App extends Component {
+  render() {
+    return (
+      <ValidationSample />
+    )
+  }
 }
 
 export default App
