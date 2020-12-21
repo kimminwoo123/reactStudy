@@ -11,7 +11,7 @@ class ValidationSample extends Component {
     handleChange = (e) => {
         this.setState({
             password: e.target.value
-        });
+        })
     }
 
     handleButtonClick = () => {
@@ -19,20 +19,29 @@ class ValidationSample extends Component {
             clicked: true,
             validated: this.state.password === '0000'
         })
+        this.input.focus()
+    }
+
+    handleDivClick = () => {
+        // this.setState({
+        //     clicked: true,
+        // })
+        this.input.focus()
     }
 
     render() {
         return (
-            <div>
+            <div onClick={this.handleDivClick}>
                 <input
                     type='password'
+                    ref={(ref) => this.input = ref}
                     value={this.state.password}
                     onChange={this.handleChange}
                     className={this.state.clicked ? (this.state.validated ? 'success' : 'failure') : ''}
                 />
                 <button onClick={this.handleButtonClick}>검증하기</button>
             </div>
-        );
+        )
     }
 }
 
