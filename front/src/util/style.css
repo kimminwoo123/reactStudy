@@ -1,0 +1,26 @@
+#div_body_parents {
+    width: 1600px;
+    height: 600px;
+    border: 1px solid #CCCCCC;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#div_body {
+    width: 1600px;
+    height: 600px;
+    padding: 20px;
+    border: 0px solid;
+    position: relative;
+    display: inline-block;
+}
+
+#div_step1 {
+    font-size: 12px;
+}
+
+#div_step2 {
+    font-size: 12px;
+    display: block;
+}
