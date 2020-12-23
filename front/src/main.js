@@ -11,9 +11,9 @@ const Main = async () => {
   let number = randomUserList.length // 사다리 수 가져옴
   const arrayColor = ColorCreate(ColorList, number) // 사다리 수 만큼 색상 배열 생성
 
-  const [verticalDiv, ladderWidth, topDiv, bottomDiv, leftSpace] = BasicScreen(shuffleItemList, randomUserList, number) // 가로사다리 없는 기본화면 생성
+  const [verticalDiv, memberDivWidth, topDiv, bottomDiv, leftSpace] = BasicScreen(shuffleItemList, randomUserList, number) // 가로사다리 없는 기본화면 생성
 
-  const [moveLineSave, progressCheck, horizonDiv, bottomDiv1] = CreateLadder(randomUserList, ladderWidth, number, topDiv, bottomDiv, leftSpace) // 가로사다리 생성 및 위 아래 div생성
+  const [moveLineSave, progressCheck, horizonDiv, bottomDiv1] = CreateLadder(randomUserList, memberDivWidth, number, topDiv, bottomDiv, leftSpace) // 가로사다리 생성 및 위 아래 div생성
 
   const winResultList = await multiPaintLadder(randomUserList, verticalDiv, moveLineSave, arrayColor, horizonDiv, progressCheck, bottomDiv1, shuffleItemList)
 

@@ -1,4 +1,8 @@
-import { LADDERHEIGHT, LEFTBLANKVALUE, DIVBODYWIDTH } from './publicConst.js'
+const LADDERHEIGHT = 400 // 사다리 높이
+
+const LEFTBLANKVALUE = 10 // 왼쪽 여백공간 크기
+
+const DIVBODYWIDTH = 1600
 
 const Sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -73,7 +77,7 @@ const getElementId = (stringId) => { // 태그 검색시 예외처리 부분
 
 const getDiv = (getWidth, getHeight, getBackgroundColor) => { // div생성
     try {
-        let div = document.createElement('span')
+        let div = document.createElement('div')
 
         if (getWidth) {
             div.style.width = getWidth
@@ -100,19 +104,20 @@ const BasicScreen = (shuffleItemList, randomUserList, number) => { // 가로사�
     const bottomDiv = [] //아래 div
 
     try {
-        let widthLadder = parseInt(800 / number) // 화면크기 / 맴버수
-        let ladderWidth = widthLadder < 100 ? 100 : widthLadder // 최소 넓이 100px 설정
-
-        const leftSpace = randomUserList.length < 16 ? DIVBODYWIDTH / randomUserList.length : 0 // 15명부터 가운데 정렬
+        let memberDivWidthMax = parseInt(DIVBODYWIDTH / number) > 200 ? 200 : parseInt(DIVBODYWIDTH / number) // 최대 넓이 200px 설정
+        let memberDivWidth = memberDivWidthMax < 100 ? 100 : memberDivWidthMax // 최소 넓이 100px 설정
+        
+        const leftValue = randomUserList.length % 2 === 1 ? memberDivWidth * Math.floor(randomUserList.length / 2) + (memberDivWidth / 2) : memberDivWidth * (randomUserList.length / 2) // 가운데 정렬시 홀수 짝수 여백값 계산
+        const leftSpace = randomUserList.length < 9 ? DIVBODYWIDTH / 2 - leftValue : 0 // 가운데 정렬 여백값 
 
         for (let i = 0; i < number; i++) {
-            topDiv[i] = getDiv(ladderWidth + 'px', '50px', '')
-            bottomDiv[i] = getDiv(ladderWidth + 'px', '50px', '')
+            topDiv[i] = getDiv(memberDivWidth + 'px', '50px', '')
+            bottomDiv[i] = getDiv(memberDivWidth + 'px', '50px', '')
 
-            topDiv[i].style.left = i * ladderWidth + LEFTBLANKVALUE + leftSpace + 'px'
+            topDiv[i].style.left = i * memberDivWidth + LEFTBLANKVALUE + leftSpace + 'px'
             topDiv[i].style.top = '20px'
 
-            bottomDiv[i].style.left = i * ladderWidth + LEFTBLANKVALUE + leftSpace + 'px'
+            bottomDiv[i].style.left = i * memberDivWidth + LEFTBLANKVALUE + leftSpace + 'px'
             bottomDiv[i].style.top = LADDERHEIGHT + 110 + 'px'
 
             topDiv[i].style.fontSize = '12px'
@@ -121,28 +126,27 @@ const BasicScreen = (shuffleItemList, randomUserList, number) => { // 가로사�
             topDiv[i].style.textAlign = 'center'
             bottomDiv[i].style.textAlign = 'center'
 
-            topDiv[i].innerHTML = i + 1 + `<br><div id="inp_top_${i}" style="width:90%; height:90%; border:1px solid #333" tabindex="${i + 1}"><span>${randomUserList[i]}</span></div>` // 처음 상단 입력값을 받는 input 태그생성
-            bottomDiv[i].innerHTML = `<input type="text" id="inp_bot_${i}" value="${shuffleItemList[i]}" style="width:90%; height:90%;" tabindex="${i + 1 + 50}" />` // 처음 하단 입력값을 받는 input 태그생성
+            bottomDiv[i].innerHTML = `<input type="text" id="inp_bot_${i}" value="${shuffleItemList[i]}" style="width:90%;" tabindex="${i + 1 + 50}" />` // 처음 하단 입력값을 받는 input 태그생성
             getElementId('div_body').appendChild(topDiv[i])
             getElementId('div_body').appendChild(bottomDiv[i])
 
             verticalDiv[i] = getDiv('2px', LADDERHEIGHT + 'px', '#aaaaaa') // 수직선 생성
 
-            verticalDiv[i].style.left = i * ladderWidth + LEFTBLANKVALUE + leftSpace + parseInt(ladderWidth / 2) + 'px'
+            verticalDiv[i].style.left = i * memberDivWidth + LEFTBLANKVALUE + leftSpace + parseInt(memberDivWidth / 2) + 'px'
             verticalDiv[i].style.top = '100px'
 
             getElementId('div_body').appendChild(verticalDiv[i])
         }
 
-        return [verticalDiv, ladderWidth, topDiv, bottomDiv, leftSpace]
+        return [verticalDiv, memberDivWidth, topDiv, bottomDiv, leftSpace]
     } catch (e) {
         console.error(e + 'BasicScreen 오류')
     }
 }
 
-const numberFloat = (n) => (parseInt(Number.parseFloat(n).toFixed(3)))
+const numberFloat = (n) => (parseInt(Number.parseFloat(n).toFixed(3))) // 소수점 3자리 까지보정
 
-const topLeftLocationMake = (ladderWidth, number, leftSpace) => { // 가로사다리 생성
+const topLeftLocationMake = (memberDivWidth, number, leftSpace) => { // 가로사다리 생성
     const topArray = []
     const topLeftArray = []
     let nRndTop = 120
@@ -155,8 +159,8 @@ const topLeftLocationMake = (ladderWidth, number, leftSpace) => { // 가로사�
 
         for (let j = 0; j < number - 1; j++) { // 세로사다리 개수 -1 만큼 반복
             for (let i = 0; i < 10; i++) { // 가로 사다리 개수
-                let width = ladderWidth
-                let left = numberFloat(parseInt(j * ladderWidth) + parseInt(ladderWidth / 2) + (LEFTBLANKVALUE + leftSpace)) // 가로사다리의 시작 위치
+                let width = memberDivWidth
+                let left = numberFloat(parseInt(j * memberDivWidth) + parseInt(memberDivWidth / 2) + (LEFTBLANKVALUE + leftSpace)) // 가로사다리의 시작 위치
                 let top = topArray[Math.floor(Math.random() * topArray.length)]
 
                 if (topLeftArray.some(v => v.left === (left - width) && v.top === top)) { // 결과 당첨 중복 오류 걸러내기
@@ -177,11 +181,11 @@ const topLeftLocationMake = (ladderWidth, number, leftSpace) => { // 가로사�
     }
 }
 
-const createLadderHorizon = (ladderWidth, number, leftSpace) => { // 가로사다리 그리기
+const createLadderHorizon = (memberDivWidth, number, leftSpace) => { // 가로사다리 그리기
     const horizonDiv = [] // 수평선
 
     try {
-        const topLeftArray = topLeftLocationMake(ladderWidth, number, leftSpace) // 가로사다리 좌표 배열 만듬
+        const topLeftArray = topLeftLocationMake(memberDivWidth, number, leftSpace) // 가로사다리 좌표 배열 만듬
 
         for (let topLeftObject of topLeftArray) { // 가로사다리를 하나씩 그려나감
             let horizonDivLength = horizonDiv.length
@@ -200,10 +204,10 @@ const createLadderHorizon = (ladderWidth, number, leftSpace) => { // 가로사�
     }
 }
 
-const CreateLadder = (randomUserList, ladderWidth, number, topDiv, bottomDiv, leftSpace) => { // 가로사다리 생성 및 위 아래 div생성
+const CreateLadder = (randomUserList, memberDivWidth, number, topDiv, bottomDiv, leftSpace) => { // 가로사다리 생성 및 위 아래 div생성
     try {
         const [moveLineSave, progressCheck, bottomDiv1] = createLadderBlock(randomUserList, number, topDiv, bottomDiv) // 사다리 위아래 블럭과 버튼 생성
-        const horizonDiv = createLadderHorizon(ladderWidth, number, leftSpace) // 가로사다리 생성
+        const horizonDiv = createLadderHorizon(memberDivWidth, number, leftSpace) // 가로사다리 생성
 
         return [moveLineSave, progressCheck, horizonDiv, bottomDiv1]
     } catch (e) {
@@ -217,7 +221,7 @@ const createLadderBlock = (randomUserList, number, topDiv, bottomDiv) => { // �
 
     try {
         for (let i = 0; i < number; i++) {
-            topDiv[i].innerHTML = i + 1 + `<br><div style="width:90%; border:1px solid #333" tabindex="${i + 1}"><span>${randomUserList[i]}</span></div>`
+            topDiv[i].innerHTML = i + 1 + `<br><div style="width:90%; height:50%; display:inline-block; border:1px solid #333" tabindex="${i + 1}"><span>${randomUserList[i]}</span></div>`
             bottomDiv[i].innerHTML = getElementId('inp_bot_' + i).value
 
             topDiv[i].style.overflow = 'auto'
