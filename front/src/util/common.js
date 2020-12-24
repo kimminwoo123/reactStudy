@@ -174,7 +174,7 @@ const topLeftLocationMake = (memberDivWidth, number, leftSpace) => { // 가로�
                     top,
                 })
             }
-        } console.log(topLeftArray)
+        }
         return topLeftArray
     } catch (e) {
         console.error(e + 'topLeftLocationMake 오류')
@@ -221,7 +221,7 @@ const createLadderBlock = (randomUserList, number, topDiv, bottomDiv) => { // �
 
     try {
         for (let i = 0; i < number; i++) {
-            topDiv[i].innerHTML = i + 1 + `<br><div style="width:90%; height:50%; display:inline-block; border:1px solid #333" tabindex="${i + 1}"><span>${randomUserList[i]}</span></div>`
+            topDiv[i].innerHTML = i + 1 + `<br><div id="member${i}" style="width:90%; height:50%; display:inline-block; border:1px solid #333" tabindex="${i + 1}">${randomUserList[i]}</div>`
             bottomDiv[i].innerHTML = getElementId('inp_bot_' + i).value
 
             topDiv[i].style.overflow = 'auto'
